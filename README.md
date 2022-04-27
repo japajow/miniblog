@@ -39,3 +39,62 @@ import { getFirestore } from "firebase/firebase";
 
 export { db };
 ```
+
+## Configurando o react router
+
+instalando o router
+
+npm i react-router-dom
+
+No App.js fazemos a configuracao do router
+
+```tsx
+import "./App.css";
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+function App() {
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <div className="container">
+          <Routes>
+            <Route></Route>
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+}
+
+export default App;
+```
+
+Criando a pasta src/pages/Home/Home.js About/About.js
+
+```tsx
+import React from "react";
+// import './Home.css';
+
+export const Home = () => {
+  return <div>Home</div>;
+};
+
+//about
+
+import React from "react";
+//import './About.css';
+
+export const About = () => {
+  return <div>About</div>;
+};
+```
+
+Configurando as rotas no App.js
+
+```tsx
+
+    <Route path={'/'} element={<Home />} />
+    <Route path={'/about'} element={<About />} />
+
+```
