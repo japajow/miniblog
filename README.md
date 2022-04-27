@@ -188,3 +188,117 @@ export const Footer = () => {
   );
 };
 ```
+
+## CSS no Navbar e Footer
+
+```css
+.footer {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #edf3f6;
+}
+```
+
+Footer.js
+
+```tsx
+
+    criando a classe
+
+// export const Footer = () => {
+//   return (
+    <footer className={styles.footer}>
+//       <h3>Escreva sobre o que voce tem interesse!</h3>
+//       <p>Mini Blog &copy; 2022</p>
+    // </footer>
+//   );
+// };
+
+```
+
+Agora no Navbar.module.css
+
+```css
+.navbar {
+  display: flex;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px -2px 10px 0px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 2em;
+}
+
+.brand {
+  font-size: 1.2em;
+}
+
+.brand span {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.link_list {
+  display: flex;
+  list-style: none;
+}
+
+.link_list li {
+  margin-right: 1em;
+}
+
+.link_list li a {
+  padding: 0.4em 0.6em;
+}
+
+.active {
+  background-color: #000;
+  color: #fff;
+}
+```
+
+Navbar.js
+
+```tsx
+
+
+// export const Navbar = () => {
+//   return (
+//     <nav className={styles.navbar}>
+      <NavLink to={"/"} className={styles.brand}>
+        Mini <span>Blog</span>
+      </NavLink>
+      <ul className={styles.link_list}>
+//         <li>
+//           <NavLink to={"/"}>Home</NavLink>
+//         </li>
+
+//         <li>
+//           <NavLink to={"/about"}>Sobre</NavLink>
+//         </li>
+//       </ul>
+//     </nav>
+//   );
+// };
+```
+
+Verificamos se esta isActive se estiver colocamos active na class
+
+```tsx
+
+      <NavLink
+            to={"/"}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
+            Home
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to={"/about"}
+            className={({ isActive }) => (isActive ? styles.active : "")}
+          >
+
+```
