@@ -576,3 +576,60 @@ button[disabled] {
   border-radius: 5px;
 }
 ```
+
+## State do form cadastro Register.js
+
+```tsx
+//Criando os estados do formulariop e erro
+const [displayName, setDisplayName] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
+const [error, setError] = useState("");
+
+//criando o metodo de submit
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+};
+
+// no form colocamos o onSubmit
+<form onSubmit={handleSubmit}></form>
+
+//linkamos os estados com os inputs
+value={displayName}
+onChange={(e)=> setDisplayName(e.target.value)}
+
+value={displayEmail}
+onChange={(e)=> setDisplayEmail(e.target.value)}
+
+value={displayPassword}
+onChange={(e)=> setDisplayPassword(e.target.value)}
+
+value={displayConfirmPassword}
+onChange={(e)=> setDisplayConfirmPassword(e.target.value)}
+
+
+//Quando envio o formulario o setError fica vazio
+
+setErro("")
+
+//formulariando o usuario
+
+const user = {
+    displayName,
+    displayEmail,
+    displayPassword
+}
+
+//validacao da senha com confirmsenha
+
+if(displayPassword != displayConfirmPassword){
+    setError("As senhas precisam ser iguais!");
+    return;
+}
+
+// e colocamos o erro abaixo do button do formulario
+  {error && <div className="error">{error}</div>}
+
+```
