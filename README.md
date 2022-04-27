@@ -633,3 +633,41 @@ if(displayPassword != displayConfirmPassword){
   {error && <div className="error">{error}</div>}
 
 ```
+
+## Criando o hook de autenticacao
+
+Criando a pasta no src/hooks/useAuthentication.js
+
+```tsx
+//importando getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,updateProfile,singOut
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+  signOut,
+} from "firebase/auth";
+
+//importamos o useState e useEffect
+import { useState, useEffect } from "react";
+
+// criamos oa funcao do hook
+export const useAuthentication = () => {
+  //criamos os estados de erro e loading
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(null);
+
+  // criamos um cleanup para apagar funcoes que nao funcione eternamente
+  const [cancelled, setCancelled] = useState(false);
+
+  //instaciamos o getAuth para usar funcoes dela 
+  const auth = getAuth();
+
+  //criamos uma funcao para reutilizar 
+  function checkIsCancelled(){
+      if(cancelled){
+          return;
+      }
+  }
+};
+```
