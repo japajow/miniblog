@@ -98,3 +98,93 @@ Configurando as rotas no App.js
     <Route path={'/about'} element={<About />} />
 
 ```
+
+## Adicionando componente o Navbar e Footer
+
+Criando o componente navbar
+
+Criando componentes/Navbar/Navbar.js Navbar.module.css Footer.js Footer.module.js
+
+Eles vao ser reptidos por toda nossa pagina
+
+```tsx
+import React from "react";
+import styles from "./Navbar.module.css";
+
+export const Navbar = () => {
+  return <div>Navbar</div>;
+};
+
+//Footer
+
+import React from "react";
+import styles from "./Footer.module.css";
+
+export const Footer = () => {
+  return <div>Footer</div>;
+};
+```
+
+inserindo o navbar e footer no App.js
+
+```tsx
+// function App() {
+//   return (
+//     <div className="App">
+//       <BrowserRouter>
+        <Navbar />
+        // <div className="container">
+        //   <Routes>
+        //     <Route path={"/"} element={<Home />} />
+        //     <Route path={"/about"} element={<About />} />
+        //   </Routes>
+        // </div>
+        <Footer />
+//       </BrowserRouter>
+//     </div>
+//   );
+// }
+```
+
+Configurando a nossa navbar com NavLink
+
+```jsx
+import React from "react";
+import styles from "./Navbar.module.css";
+import { NavLink } from "react-router-dom";
+
+export const Navbar = () => {
+  return (
+    <nav>
+      <Navlink to={"/"}>
+        Mini <span>Blog</span>
+      </Navlink>
+      <ul>
+        <li>
+          <NavLink to={"/"}>Home</NavLink>
+        </li>
+
+        <li>
+          <NavLink to={"/about"}>Sobre</NavLink>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+```
+
+Agora vamos no Footer.js
+
+```tsx
+import React from "react";
+import styles from "./Footer.module.css";
+
+export const Footer = () => {
+  return (
+    <footer>
+      <h3>Escreva sobre o que voce tem interesse!</h3>
+      <p>Mini Blog &copy; 2022</p>
+    </footer>
+  );
+};
+```
