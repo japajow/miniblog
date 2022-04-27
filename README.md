@@ -33,7 +33,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // importando o firestore pelo firebase/firebase
-import { getFirestore } from "firebase/firebase";
+import { getFirestore } from "firebase/firestore";
 
 //exportamos o db
 
@@ -660,14 +660,138 @@ export const useAuthentication = () => {
   // criamos um cleanup para apagar funcoes que nao funcione eternamente
   const [cancelled, setCancelled] = useState(false);
 
-  //instaciamos o getAuth para usar funcoes dela 
+  //instaciamos o getAuth para usar funcoes dela
   const auth = getAuth();
 
-  //criamos uma funcao para reutilizar 
-  function checkIsCancelled(){
-      if(cancelled){
-          return;
-      }
+  //criamos uma funcao para reutilizar a verificacao se esta cancelado ou nao
+  function checkIsCancelled() {
+    if (cancelled) {
+      return;
+    }
   }
 };
+```
+
+## Registrando usuario no sistema
+
+Criando uma funcao que cria usuario com a funcionalidade asyncrona
+
+```tsx
+const createUser = async (data) => {
+  //verificamos se esta cancelado ou nao
+  checkIsCancelled();
+  // chamamos o loading
+  setLoading(true);
+
+  // criamos um try catch
+
+  try {
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    );
+
+    await updateProfile(user, { displayName: data.displayName });
+
+    return user;
+  } catch (error) {
+    console.log(error.message);
+    console.log(typeof error.message);
+  }
+
+  //passamos o setLoading como falso
+  setLoading(false);
+};
+
+//criamos um useEffect() para passar o setCancelled para false assim que sairmos dessa pagina
+useEffect(() => {
+  return () => setCancelled(true);
+}, []);
+
+//retornamos
+return { auth, createUser, error, loading };
+```
+
+Agora linkamos o Register.js com o nosso hook feito cima
+
+```tsx
+//renomeamos o error pq ja temos no fronend uma variavel chamada error
+const { createUser, error: authError, loading } = useAuthentication();
+
+//transformamos nosso handleSubmit em um async await e chamamso o createUser(user) passando o user
+
+const res = await createUser(user);
+
+const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   setError("");
+
+//   const user = {
+//     displayName,
+//     displayEmail,
+//     displayPassword,
+//   };
+
+//   if (displayPassword != displayConfirmPassword) {
+//     setError("As senhas precisam ser iguais!");
+//     return;
+//   }
+
+  const res = await createUser(user);
+
+  console.log(res);
+};
+
+// para o sistema saber que estamos usando o firebase importamos o db no nosso Register.js
+import {db} from ../../firebase/config
+
+
+
+```
+
+Vamos no nosso Hook e pegar os erros com catch e apresentar ao usuario mais amigavel
+
+```tsx
+//Criamos uma variavel let para pegar os erros
+let systemErrorMessage;
+
+//criamos um if else para verificar e pegar os erros do systema vindo pelo firebase
+let systemErrorMessage;
+
+if (error.message.includes("Password")) {
+  systemErrorMessage = "A senha precisa conter pelo menos 6 caracteres";
+} else if (error.message.includes("email-already")) {
+  systemErrorMessage = "E-mail ja cadastrado";
+} else {
+  systemErrorMessage = "Ocorreu um erro, por favor tente mais tarde ";
+}
+
+//passamos os erros para o setError()
+
+setError(systemErrorMessage);
+```
+
+No Register.js criamos um useEffect() para ficar de olho se algum erro aconteceu
+
+```tsx
+useEffect(() => {
+  if (authError) {
+    setError(authError);
+  }
+}, [authError]);
+
+//incluimos o loading no nosso button
+{
+  !loading ? (
+    <button type="submit" className="btn">
+      Cadastrar
+    </button>
+  ) : (
+    <button type="submit" className="btn">
+      Carregando
+    </button>
+  );
+}
 ```
