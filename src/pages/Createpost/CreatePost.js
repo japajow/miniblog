@@ -3,6 +3,7 @@ import styles from "./CreatePost.module.css";
 
 import { useAuthValue } from "../../context/AuthContext";
 import { useAuthentication } from "../../hooks/useAuthentication";
+import { useInsertDocument } from "../../hooks/useInsertDocument";
 
 export const CreratePost = () => {
   const [title, setTitle] = useState("");
@@ -11,10 +12,23 @@ export const CreratePost = () => {
   const [tags, setTags] = useState([]);
   const [formError, setFormError] = useState("");
 
-  const { error, loading } = useAuthentication();
+  const { insertDocument, response } = useInsertDocument("posts");
+  console.log(response);
+  const { user } = useAuthValue();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setFormError("");
+
+    // e colocamos a funcao insertDocument
+    insertDocument({
+      title,
+      image,
+      body,
+      tags,
+      uid: user.uid,
+      createdBy: user.displayName,
+    });
   };
   return (
     <div className={styles.create}>
@@ -38,7 +52,7 @@ export const CreratePost = () => {
           <span>imagens:</span>
           <input
             name="image"
-            type="file"
+            type="text"
             value={image}
             onChange={(e) => setImage(e.target.value)}
             id="title"
@@ -72,16 +86,13 @@ export const CreratePost = () => {
           />
         </label>
 
-        {!loading ? (
-          <button type="submit" className="btn">
-            Cadastrar
-          </button>
-        ) : (
-          <button type="submit" className="btn" disabled>
-            Carregando
+        {!response.loading && <button className="btn">Cadastrar</button>}
+        {response.loading && (
+          <button className="btn" disabled>
+            Aguarde...
           </button>
         )}
-        {error && <div className="error">{error}</div>}
+        {response.error && <div className="error">{response.error}</div>}
       </form>
     </div>
   );

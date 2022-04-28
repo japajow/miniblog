@@ -2,11 +2,6 @@ import { useState, useEffect, useReducer } from "react";
 import { db } from "../firebase/config";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
-const initialState = {
-  loading: null,
-  error: null,
-};
-
 const insertReducer = (state, action) => {
   switch (action.type) {
     case "LOADING":
@@ -21,11 +16,14 @@ const insertReducer = (state, action) => {
 };
 
 export const useInsertDocument = (docCollection) => {
-  const [response, dispatch] = useReducer(insertReducer, initialState);
+  const [response, dispatch] = useReducer(insertReducer, {
+    loading: null,
+    error: null,
+  });
   const [cancelled, setCancelled] = useState(false);
 
   const checkCancelBeforeDispatch = (action) => {
-    if (!cancelled) {
+    if (cancelled) {
       dispatch(action);
     }
   };
@@ -33,11 +31,11 @@ export const useInsertDocument = (docCollection) => {
   const insertDocument = async (document) => {
     checkCancelBeforeDispatch({
       type: "LOADING",
-      payload: insertedDocument,
     });
 
     try {
       //pegamos o documento que vai ser inserido
+      console.log(document);
       const newDocument = { ...document, createdAt: Timestamp.now() };
 
       //criamos uma funcao para o resultado da insercao
@@ -60,7 +58,7 @@ export const useInsertDocument = (docCollection) => {
 
   useEffect(() => {
     return () => setCancelled(true);
-  }, []);
+  }, [setCancelled]);
 
   return { insertDocument, response };
 };

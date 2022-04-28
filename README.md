@@ -1348,6 +1348,7 @@ Coloando na div do formulario o estilo criado
 ```
 
 ## Criando um novo hook de post
+
 src/hooks/useInsertDocument.js
 
 ```tsx
@@ -1464,4 +1465,63 @@ useEffect(() => {
 
 // e retornar o insertCodument e response
 return { insertDocument, response };
+```
+
+## Inserindo dados no Firebase
+
+Unindo o nosso hook post feito acima com nosso fomrmulario de criar post
+
+No CreatePost.js
+
+```tsx
+//importando o useInsertDocument
+import { useInsertDocument } from "../hooks/useInsertCodument";
+
+//chamamos o nosso hook useInsertDocument
+const { insertDocument, response } = useInsertDocument("posts");
+
+//pegamos o usuario
+const { user } = useAuthValue();
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  //primeiro zerar os erros do nosso formulario
+  setFormError("");
+
+  //validar a url da imagem
+
+  //criar o array de tatgs
+
+  //checar todos os valores
+
+  // e colocamos a funcao insertDocument
+  insertDocument({
+    title,
+    image,
+    body,
+    tags,
+    uid: user.uid,
+    createdBy: user.displayName,
+  });
+
+  //redirecionamos ele para home
+};
+
+//nosso botao de loading e erro vem pelo response
+
+{
+  !response.loading ? (
+    <button type="submit" className="btn">
+      Cadastrar
+    </button>
+  ) : (
+    <button type="submit" className="btn" disabled>
+      Carregando
+    </button>
+  );
+}
+{
+  response.error && <div className="error">{response.error}</div>;
+}
 ```
