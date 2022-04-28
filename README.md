@@ -1575,3 +1575,83 @@ if (!title || !tags || !image || !body) {
     //redireciona a Home
     navigate("/");
 ```
+
+## estruturando a HOME
+
+vamos na HOme.js
+
+```tsx
+//criamos o formulario de pesquisa
+<form>
+  <input
+    type="text"
+    placeholder="ou busque por tags..."
+    onChange={(e) => setQuery(e.target.value)}
+  />
+  <button className="btn btn-dark">Pesquisar</button>
+</form>;
+
+// criamos as querys do estado
+const [query, setQuery] = useState("");
+
+//criamos estado do posts
+const [posts] = useState([]);
+
+//criamos nosso handleSubmit
+const handleSubmit = (e) => {
+  e.preventDefault();
+};
+
+// criamos o nosso HTMl quando nao houver postes
+{
+  posts && posts.length === 0 && (
+    <div className={styles.noposts}>
+      <p>Nao foram encontrados posts</p>
+      <Link to={"/posts/create"} className={"btn"}>
+        Criar primeiro post
+      </Link>
+    </div>
+  );
+}
+
+//passamos as classes no HTML
+<div className={styles.home}>
+      <h1>Veja os nossos posts mais recentes</h1>
+      <form onSubmit={handleSubmit} className={styles.search_form}></form>
+```
+
+estilizando a Home.module.css
+
+```css
+.home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.search_form {
+  max-width: 100%;
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+.search_form input {
+  margin-right: 10px;
+  width: 50%;
+}
+
+.noposts {
+  text-align: center;
+}
+
+.noposts p {
+  margin-bottom: 1.5em;
+}
+
+.noposts a {
+  padding: 10px 25px;
+}
+```
