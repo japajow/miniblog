@@ -1525,3 +1525,53 @@ const handleSubmit = (e) => {
   response.error && <div className="error">{response.error}</div>;
 }
 ```
+
+## Validacao dos dados
+
+Em CreatePost.js
+
+```tsx
+// validando a URL da imagem
+try {
+  new URL(image);
+} catch (error) {
+  setFormErro("A imagem precisa ser uma URL");
+}
+
+//casp tiver erro no formError ele retorna epara que nao prociga
+if (formError) {
+  return;
+}
+
+// mostramos o erro conforme abaixo
+{
+  formError && <div className="error">{formError}</div>;
+}
+
+//criando um metodo para pegar as tags e transformalas em uma array
+//em seguida usamos o map para fazer algumas modificacoes na tags
+//limpamos os espaco com trim()
+//passamos todos a serem minusculos as tags
+
+const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
+
+//validamos se todos os valores vieram
+if (!title || !tags || !image || !body) {
+  setFormEr
+
+  //subtistuimos a tags por tagsArray
+  insertDocument({
+      title,
+      image,
+      body,
+      tagsArray, >>>> aqui
+      uid: user.uid,
+      createdBy: user.displayName,
+    });
+
+    //importamos o useNavigate
+    const navigate = useNavugate()
+
+    //redireciona a Home
+    navigate("/");
+```

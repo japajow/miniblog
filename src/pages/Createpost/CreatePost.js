@@ -4,6 +4,7 @@ import styles from "./CreatePost.module.css";
 import { useAuthValue } from "../../context/AuthContext";
 import { useAuthentication } from "../../hooks/useAuthentication";
 import { useInsertDocument } from "../../hooks/useInsertDocument";
+import { useNavigate } from "react-router-dom";
 
 export const CreratePost = () => {
   const [title, setTitle] = useState("");
@@ -16,20 +17,44 @@ export const CreratePost = () => {
   console.log(response);
   const { user } = useAuthValue();
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormError("");
+
+    //Validando a imagem se e uma URL
+    try {
+      new URL(image);
+    } catch (error) {
+      setFormError("A imagem precisa ser uma URL");
+    }
+
+    //tags
+    const tagsArray = tags.split(",").map((tag) => tag.trim().toLowerCase());
+
+    //validamos se todos os valores vieram
+    if (!title || !tags || !image || !body) {
+      setFormError("Por favor, Preencha todos os campos!");
+    }
+
+    if (formError) {
+      return;
+    }
 
     // e colocamos a funcao insertDocument
     insertDocument({
       title,
       image,
       body,
-      tags,
+      tagsArray,
       uid: user.uid,
       createdBy: user.displayName,
     });
+    //redireciona a Home
+    navigate("/");
   };
+
   return (
     <div className={styles.create}>
       <h2>Criar post</h2>
@@ -93,6 +118,7 @@ export const CreratePost = () => {
           </button>
         )}
         {response.error && <div className="error">{response.error}</div>}
+        {formError && <div className="error">{formError}</div>}
       </form>
     </div>
   );
