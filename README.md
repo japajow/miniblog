@@ -795,3 +795,47 @@ useEffect(() => {
   );
 }
 ```
+
+## Contexto de autenticacao
+
+criando uma pasta src/context/AuthContext.js
+
+```tsx
+//criamodo contexto
+const AuthContext = createContext();
+
+//criamos a funcao provider
+export function AuthProvider({ children, value }) {
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+//Criamos uma funcao que retorna o contexto criado acima, assim nao criamos o hook deste context
+export function useAuthvalue() {
+  return useContext(AuthContext);
+}
+```
+
+Vamos no App.js e inserir nosso Provider feito acima
+
+```tsx
+// function App() {
+//   return (
+//     <div className="App">
+<AuthProvider>
+  <BrowserRouter>
+    <Navbar />
+    <div className="container">
+      <Routes>
+        <Route path={"/"} element={<Home />} />
+        <Route path={"/about"} element={<About />} />
+        <Route path={"/register"} element={<Register />} />
+        <Route path={"/login"} element={<Login />} />
+      </Routes>
+    </div>
+    <Footer />
+  </BrowserRouter>
+</AuthProvider>
+//     </div>
+//   );
+// }
+```
