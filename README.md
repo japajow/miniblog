@@ -1345,6 +1345,123 @@ Coloando na div do formulario o estilo criado
 
 ```tsx
   <div className={styles.create}>
+```
 
+## Criando um novo hook de post
+src/hooks/useInsertDocument.js
 
+```tsx
+//importando o useState useEffect useReducer
+import { useState, useEffect, useReducer } from "react";
+//importamos o db fo firebase
+import { db } from "firebase/config";
+
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+//collection para trabalhar com tipo as tabelas mysql
+//addDoc para fazer insert no documento do banco
+//Timestamp para registrar o horario que foi criado
+
+//criamos o estado inicial para o reducer
+const initialState = {
+  loading: null,
+  error: null,
+};
+
+//vamsoi criar o reducer
+const insertReducer = (state, action) => {};
+
+//exportamos o nosso userInsertDocument , informamos qual e a colecao
+export const useInsertDocument = (docCollection) => {
+  // resposta e dispatch , iniciar o hook iniciar com insertReducer e o initialState
+  const [response, dispatch] = useReducer(insertReducer, initialState);
+
+  // depois vamos liberar a memoria
+  const [cancelled, setCancelled] = useState(false);
+
+  //criamos uma funcao para o cancelled antes de qualquer acao verifico se esta cancelado ou nao
+  const checkCancelBeforeDispatch = (action) => {
+    if (!cancelled) {
+      dispatch(action);
+    }
+  };
+
+  // agora tnemos a funcao de inserir o post
+  const insertDocument = async (document) => {
+    try {
+      //pegamos o documento que vai ser inserido
+      const newDocument = { ...document, createdAt: Timestamp.now() };
+
+      //criamos uma funcao para o resultado da insercao
+      const insertedDocument = await addDoc(
+        collection(db, docCollection),
+        newDocument
+      );
+
+      checkCancelBeforeDispatch({
+        type: "",
+        payload: insertedDocument,
+      });
+    } catch (error) {}
+  };
+
+  //voltamos para o nosso insertReducer e preencher as actions
+
+  const insertReducer = (state, action) => {
+    switch (action.type) {
+      case "LOADING":
+        return { loading: true, error: null };
+      case "INSERTED_DOC":
+        return { loading: false, error: null };
+      case "ERROR":
+        return { loading: false, error: action.payload };
+      default:
+        return state;
+    }
+  };
+
+  //agora no inserimos os loadings no nosso sistema
+
+  checkCancelBeforeDispatch({
+    type: "LOADING",
+    payload: insertedDocument,
+  });
+};
+
+//deixando o nosso insertDocument assim
+
+const insertDocument = async (document) => {
+  checkCancelBeforeDispatch({
+    type: "LOADING",
+    payload: insertedDocument,
+  });
+
+  try {
+    //pegamos o documento que vai ser inserido
+    const newDocument = { ...document, createdAt: Timestamp.now() };
+
+    //criamos uma funcao para o resultado da insercao
+    const insertedDocument = await addDoc(
+      collection(db, docCollection),
+      newDocument
+    );
+
+    checkCancelBeforeDispatch({
+      type: "INSERTED_DOC",
+      payload: insertedDocument,
+    });
+  } catch (error) {
+    checkCancelBeforeDispatch({
+      type: "ERROR",
+      payload: error.message,
+    });
+  }
+};
+
+// colocamos o setCacelled como true para liberar a memoria do sistema
+useEffect(() => {
+  return () => setCancelled(true);
+}, []);
+
+// e retornar o insertCodument e response
+return { insertDocument, response };
 ```
