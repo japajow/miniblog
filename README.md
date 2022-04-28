@@ -964,3 +964,75 @@ Agora vamos na Navbar e colocamos se o usuario estiver logado apareca os links d
   );
 }
 ```
+
+## Bloqueio de paginas que precisa de auenticacao
+
+Vamos no App.js que temos acesso ao usuario autenticado ou nao
+
+```tsx
+
+  //no element do Route fazermo um ifi ternario
+  // se o usuario nao esta presente mandamos ele para outra rota
+   element={!user ? <Login /> : <Navigate to={"/"} />}
+
+   //quando estiver logado
+    <Route
+        path={"/register"}
+        element={!user ? <Register /> : <Navigate to={"/"} />}
+      />
+      <Route
+        path={"/login"}
+        element={!user ? <Login /> : <Navigate to={"/"} />}
+      />
+
+  //quando nao estiver logado
+    <Route
+        path={"/dashboard"}
+        element={user ? <Dashboard /> :  <Navigate to={"/login"} />}
+      />
+      <Route
+        path={"/posts/create"}
+        element={user ? <CreratePost /> :  <Navigate to={"/login"} />}
+      />
+
+```
+
+Criando o HTML do sobre
+About.js
+
+```tsx
+<div className={styles.about}>
+  <h2>
+    Sobre o Mini <span>Blog</span>
+  </h2>
+  <p>
+    Este projeto consiste em um blog feito com react no front-end e Firebase no
+    back-end
+  </p>
+  <Link to={"/posts/create"} className={"btn"}>
+    Criar post
+  </Link>
+</div>
+```
+
+Colocando estilo no About.module.css
+
+```css
+.about {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about p {
+  color: #aaa;
+  margin-bottom: 2em;
+}
+
+.about a {
+  display: block;
+  margin-top: 15px;
+  padding: 10px 15px;
+}
+```
