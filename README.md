@@ -1220,3 +1220,131 @@ const { error: authError, loading, login } = useAuthentication();
 // chamamos o nosso login() passando o usurio do formulario
 const res = login(user);
 ```
+
+## Estrutura da pagina de criar postes CreatePost.js
+
+CreatePost.js
+
+```tsx
+// primeiro importamos o que vamos utilizar
+//estado
+import { useState } from "react";
+//useNavigate para criar a rota
+import { useNavigate } from "reatc-router-dom";
+//e o nosso useAuthValue para poder atrelar o nosso usuario do post
+import { useAuthValue } from "../../context/AuthContext";
+
+// criamos o estado do titulo
+const [title, setTitle] = useState("");
+//criamos o estado da imagem
+const [image, setImage] = useState("");
+// criamos o estado do conteudo chamando o de body
+const [body, setBody] = useState("");
+//criamos o estado de cada tag de cada postes
+const [tags, setTags] = useState([]);
+//criamos o error para pegar os error de formulario
+const [formError, setFormError] = useState("");
+
+//chamamso o nosso hook
+const { error, loading } = useAuthentication();
+
+//criamos a funcao de envio
+const handleSubmit = (e) => {
+  e.preventDefault();
+};
+
+//Criando a estrutura HTML do create post
+
+<div>
+  <h2>Criar post</h2>
+  <p>Escreva sobre o que quiser e compartilhe o seu conhecimento</p>
+  <form onSubmit={handleSubmit}>
+    <label>
+      <span>Titulo:</span>
+      <input
+        name="title"
+        type="text"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        id="title"
+        placeholder="Digite o titulo do post"
+        required
+      />
+    </label>
+
+    <label>
+      <span>imagens:</span>
+      <input
+        name="image"
+        type="file"
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+        id="title"
+        placeholder="Insira uma imagem que representa seu post"
+        required
+      />
+    </label>
+
+    <label>
+      <span>Conteudo:</span>
+      <textarea
+        name="body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        id="title"
+        placeholder="Insira o conteudo do post"
+        required
+      ></textarea>
+    </label>
+
+    <label>
+      <span>Tags:</span>
+      <input
+        name="tags"
+        type="text"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+        id="title"
+        placeholder="Insira as tags separadas por virgula"
+        required
+      />
+    </label>
+
+    {!loading ? (
+      <button type="submit" className="btn">
+        Cadastrar
+      </button>
+    ) : (
+      <button type="submit" className="btn" disabled>
+        Carregando
+      </button>
+    )}
+    {error && <div className="error">{error}</div>}
+  </form>
+</div>;
+```
+
+Ajustando um pouco o css CreatePost.module.css
+
+```css
+.create_post {
+  align-items: center;
+}
+
+.create_post h2 {
+  font-size: 2.2em;
+}
+
+.create_post p {
+  color: #aaa;
+  margin-bottom: 2em;
+}
+```
+
+Coloando na div do formulario o estilo criado
+
+```tsx
+  <div className={styles.create}>
+
+
+```
