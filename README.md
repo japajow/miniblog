@@ -1655,3 +1655,79 @@ estilizando a Home.module.css
   padding: 10px 25px;
 }
 ```
+
+## criando hook resgate dos dados que esta firebase
+
+criando o hooks/useFetchDocuments.js
+
+```tsx
+import { useState, useEffect } from "react";
+import { db } from "../firebase/config";
+import {
+  collection, // definir os dados da collection
+  query, // recupera os dados
+  orderBy, // ordernar
+  onSnapshot, //ele verifica se tem dados novos se tiver ele traz
+  where, // a onde
+} from "firebase/firestore";
+
+//criando a funcao useFetchDocuments
+//docCollection de  qual banco de dados
+// search de busca como nulo
+// id como nulo para poder pegar os dados do usuario
+export const useFetchDocuments = (docCollection, search = null, uid = null) => {
+  //setando os documents
+  const [documents, setDocuments] = useState(null);
+  //erro
+  const [error, setError] = useState(null);
+  //loading
+  const [loading, setLoading] = useState(null);
+
+  //fazendo o sistema da memoria leak para limpar a  memoria
+  const [cancelled, setCancelled] = useState(false);
+
+  // criamos a funcao baseada no useEffect
+  //se chegar dados buscamos docCollection, busca dados
+  // search busca dados
+  // uid busca dados
+  //cancelled poder nao mais buscar dados , encerra o papel do useEffect
+  useEffect(() => {
+    //criamos a funcao asyncrona
+    async function loadData() {
+      if (cancelled) return;
+
+      setLoading(true);
+
+      const collectionRef = collection(db, docCollection);
+
+      try {
+        let q;
+
+        q = await query(collectionRef, orderBy("createdAt", "desc"));
+
+        await onSnapshot(q, (querySnapshot) => {
+          setDocument(
+            querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+          );
+        });
+
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError(error.message);
+        setLoading(false);
+      }
+      loadData();
+    }
+  }, [docCollection, search, uid, cancelled]);
+
+  useEffect(() => {
+    return () => setCancelled(true);
+  }, []);
+
+  return { document, loading, error };
+};
+```
