@@ -881,3 +881,86 @@ useEffect(() => {
 
 <AuthProvider value={{ user }}></AuthProvider>;
 ```
+
+## Links para usuario autenticado e links nao autenticado
+
+Vamos no Navbar.js e puxar o contexto para ele
+
+```tsx
+//comecamos importando
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthValue } from "../../context/AuthContext";
+
+//pegamos o usuario
+const { user } = useAuthValue();
+
+//Os links de entrar e cadastra nao faz sentido se o usuario estiver logado
+//vamos fazer um if checando se esta logado ou nao
+{
+  !user && (
+    <>
+      <li>
+        <NavLink
+          to={"/login"}
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Entrar
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to={"/register"}
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Registrar
+        </NavLink>
+      </li>
+    </>
+  );
+}
+```
+
+Vamos criar paginas para usuario autenticado
+
+pages/Dashboard/Dashboard.js Dashboard.module.css
+
+pages/CreatePost/CreatePost.js CreatePost.module.css
+
+Vamos no App.js, e criar as nossas rotas
+
+```tsx
+
+
+  <Route path={"/dashboard"} element={<Dashboard />} />
+  <Route path={"/posts/create"} element={<CreratePost />} />
+
+```
+
+Agora vamos na Navbar e colocamos se o usuario estiver logado apareca os links dashboard e createpost
+
+```tsx
+{
+  user && (
+    <>
+      <li>
+        <NavLink
+          to={"/dashboard"}
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Dashboard
+        </NavLink>
+      </li>
+
+      <li>
+        <NavLink
+          to={"/posts/create"}
+          className={({ isActive }) => (isActive ? styles.active : "")}
+        >
+          Criar Novo Posts
+        </NavLink>
+      </li>
+    </>
+  );
+}
+```
