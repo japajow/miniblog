@@ -19,7 +19,7 @@ import { Dashboard } from "./pages/Dashboard/Dashboard";
 
 function App() {
   const [user, setUser] = useState(undefined);
-  const { auth } = useAuthentication();
+  const { auth, logout } = useAuthentication();
 
   const loadingUser = user === undefined;
 

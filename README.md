@@ -1036,3 +1036,31 @@ Colocando estilo no About.module.css
   padding: 10px 15px;
 }
 ```
+
+## funcao de logout no nosso sistema
+
+Vamos no nosso hook useAuthentication.js
+
+```tsx
+//logout
+const logout = () => {
+  checkIsCancelled();
+  signOut(auth);
+};
+
+//passamos o logout no retorno
+return { logout };
+```
+
+Vamos na Navbar.js e criar uma rota para o logout
+
+```tsx
+const { logout } = useAuthentication();
+{
+  user && (
+    <li>
+      <button onClick={logout}>Deslogar</button>
+    </li>
+  );
+}
+```
