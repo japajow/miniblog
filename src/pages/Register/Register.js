@@ -30,10 +30,8 @@ export const Register = () => {
       setError("As senhas precisam ser iguais!");
       return;
     }
-  
-    const res = await createUser(user);
 
-    
+    const res = await createUser(user);
   };
 
   useEffect(() => {
@@ -89,7 +87,7 @@ export const Register = () => {
           <span>Confirmação de senha:</span>
           <input
             type="password"
-            id="password"
+            id="confirmPassword"
             name="confirmPassword"
             required
             placeholder="Confirme sua senha"
