@@ -839,3 +839,45 @@ Vamos no App.js e inserir nosso Provider feito acima
 //   );
 // }
 ```
+
+## Passando o usuario para o contexto
+
+Vamos no App.js e envolver nosso AuthProvider com o valor do usuario recuperado
+
+```tsx
+//importamos o onAuthStateChanged , ele que mapeia se o usuario esta logado com sucesso
+import { onAuthStateChanged } from "firebase/auth";
+
+//importamos alguns hooks , useState useEffect
+import { useState, useEffect } from "react";
+
+//importamos  nosso Hook useAuthentication
+import { useAuthentication } from "./hooks/useAuthentication";
+
+//agora vamos iniciar a logica de como monitora o status do usuario
+
+// criamos o estado do user
+const [user, setUser] = useState(undefined);
+
+// criamos o auth invocado com useAuthentication
+const { auth } = useAuthentication();
+
+//criamos um loadingUser para ver se ja carregou ou nao o usuario
+const loadingUser = user === undefined;
+
+//checamos se ta carregando o usuario
+if (loadingUser) {
+  return <p>Carregando...</p>;
+}
+
+//criamos um useEffect para ficar de olho se esta autenticado ou nao o user
+useEffect(() => {
+  onAuthStateChanged(auth, (user) => {
+    setUser(user);
+  });
+}, [auth]);
+
+// Agora passamo o user para o nosso value do Provider
+
+<AuthProvider value={{ user }}></AuthProvider>;
+```
