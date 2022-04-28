@@ -10,7 +10,7 @@ export const Login = () => {
   const [displayPassword, setDisplayPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { error: authError, loading } = useAuthentication();
+  const { error: authError, loading ,login} = useAuthentication();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +21,8 @@ export const Login = () => {
       displayEmail,
       displayPassword,
     };
+
+    const res = login(user);
   };
 
   useEffect(() => {

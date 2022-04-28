@@ -1171,3 +1171,52 @@ no Login.js colocamos a className
   <div className={styles.login}>
 
 ```
+
+## Login do usuario
+
+Vamos no hook/useauthentication.js
+
+```tsx
+//login
+
+const login = async (data) => {
+  checkIsCancelled();
+
+  setLoading(true);
+  setError("");
+
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      data.displayEmail,
+      data.displayPassword
+    );
+    setLoading(false);
+  } catch (error) {
+    let systemErrorMessage;
+
+    if (error.message.includes("user-not-found")) {
+      systemErrorMessage = "Usuário não existente, verifique novamente.";
+    } else if (error.message.includes("wrong-password")) {
+      systemErrorMessage = "Senha incorreta, verifique novamente.";
+    } else {
+      systemErrorMessage = "Ocorreu um erro, por favor tente mais tarde ";
+    }
+    setLoading(false);
+    setError(systemErrorMessage);
+  }
+};
+
+// retornamos o login para ser utilizado
+return { login };
+```
+
+vamois no Login.js e utilizar o login do hook
+
+```tsx
+//acrecentamos o login
+const { error: authError, loading, login } = useAuthentication();
+
+// chamamos o nosso login() passando o usurio do formulario
+const res = login(user);
+```
