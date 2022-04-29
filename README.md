@@ -2144,3 +2144,32 @@ const posts = []
       )}
     </div>
 ```
+
+## Exibindo os posts do usuario na Dashboard
+
+Vamos no useFetchDocuments.js e incluir mais uma condifcao de query
+
+```tsx
+q = await query(
+  collectionRef,
+  where("uid", "==", uid),
+  orderBy("createdAt", "desc")
+);
+```
+
+vamos agora na dashboard
+
+```tsx
+
+apagamos o const posts = []
+e colocamos no luigar
+ const { document: posts, loading } = useFetchDocuments("posts", null, uid);
+
+  {posts &&
+        posts.map((post) => (
+          <div>
+            <h3>{post.title}</h3>
+          </div>
+        ))}
+
+```

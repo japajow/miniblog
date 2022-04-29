@@ -11,11 +11,12 @@ export const Dashboard = () => {
   const { user } = useAuthValue();
   const uid = user.uid;
 
-  const posts = [];
+  const { document: posts, loading } = useFetchDocuments("posts", null, uid);
   return (
     <div>
       <h2>Dashboard</h2>
       <p>Gerencie os seus posts</p>
+      {loading && <p>Carregando...</p>}
       {posts && posts.length === 0 ? (
         <div className={styles.noposts}>
           <p>Nao foram encontados posts</p>
@@ -26,6 +27,13 @@ export const Dashboard = () => {
       ) : (
         <div></div>
       )}
+
+      {posts &&
+        posts.map((post) => (
+          <div>
+            <h3>{post.title}</h3>
+          </div>
+        ))}
     </div>
   );
 };
