@@ -2108,3 +2108,39 @@ etilizando
   font-weight: bold;
 }
 ```
+
+## Estruturando o Dashboard
+
+Dashboard.js
+
+```tsx
+//Importando o Link
+import { Link } from "react-router-dom";
+// importando alguns hooks
+import { useAuthValue } from "../../context/AuthContext";
+import { useFetchDocuments } from "../../hooks/useFetchDocuments";
+
+//Pegando o usuario
+const { user } = useAuthValue();
+//pegando o id do usuario
+const uid = user.uid;
+
+//Posts do usuario
+const posts = []
+
+//estruturando o HTML
+ <div>
+      <h2>Dashboard</h2>
+      <p>Gerencie os seus posts</p>
+      {posts && posts.length === 0 ? (
+        <div className={styles.noposts}>
+          <p>Nao foram encontados posts</p>
+          <Link to={"/posts/create"} className="btn">
+            Criar primeiro post
+          </Link>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+```
