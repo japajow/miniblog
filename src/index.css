@@ -71,7 +71,6 @@ textarea {
   border: none;
   padding: 10px 15px;
   font-size: 1em;
-
 }
 
 .btn.btn-dark {
@@ -110,4 +109,16 @@ button[disabled] {
   padding: 5px;
   border-radius: 5px;
   margin-top: 1em;
+}
+
+.noposts {
+  text-align: center;
+}
+
+.noposts p {
+  margin-bottom: 1.5em;
+}
+
+.noposts a {
+  padding: 10px 25px;
 }
