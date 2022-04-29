@@ -16,6 +16,7 @@ import { useState, useEffect } from "react";
 import { useAuthentication } from "./hooks/useAuthentication";
 import { CreratePost } from "./pages/Createpost/CreatePost";
 import { Dashboard } from "./pages/Dashboard/Dashboard";
+import { Search } from "./pages/Search/Search";
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -42,6 +43,7 @@ function App() {
             <Routes>
               <Route path={"/"} element={<Home />} />
               <Route path={"/about"} element={<About />} />
+              <Route path={"/search"} element={<Search />} />
               <Route
                 path={"/register"}
                 element={!user ? <Register /> : <Navigate to={"/"} />}

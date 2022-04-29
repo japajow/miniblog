@@ -1833,4 +1833,76 @@ colocando as classes no HTML do PostDetails.js
 
 ```
 
+## Criando a funcionalidade de busca
 
+Vamos no useFetchDocuments.js
+
+```tsx
+//temos o search = null
+//fazer a busca atraves das tags
+//dentro do try
+if (search) {
+  q = await query(
+            collectionRef,
+            where("tags", "array-contains", search),
+            orderBy("createdAt", "desc")
+} else {
+  q = await query(collectionRef, orderBy("createdAt", "desc"));
+}
+```
+
+Agora vamos na Home.js
+
+```tsx
+//const navigate  usamos o hook useNavigate
+const navigate = useNavigate();
+//no handleSubmit
+const handleSubmit = (e) => {
+  e.preventDefault();
+
+  if (query) {
+    return navigate(`/search?q=${query}`);
+  }
+};
+```
+
+Criando a nova pagina de busca
+pages/search/Search.js e Search.module.css
+
+Vamos no App.js e criamos a URL para o Search
+
+```tsx
+<Route path={"/search"} element={<Search />} />
+```
+
+No search.js
+
+```tsx
+//importamos o hook import { useFetchDocuments } from "../../hooks/useFetchDocuments";
+import { useFetchDocuments } from "../../hooks/useFetchDocuments";
+```
+
+Criamos agora um novo hook useQuery.js
+
+```tsx
+import { useLocation } from "react-router-dom";
+import { useMemo } from "react";
+
+export function useQuery() {
+  // pegamos o search pela url
+  const { search } = useLocation();
+  // envolvemos o useMemo  e chamamos o URLSearchParams para buscar um parametro pela URL
+  //essa funcao so vai ser executada quando osearch for alterada
+
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
+```
+
+Voltamosno Search.js e importamos tambem esse hook useQuery()
+
+```tsx
+import { useQuery } from "../../hooks/useQuery";
+const query = useQuery();
+//pegamos o atributo q
+const search = query.get("q");
+```

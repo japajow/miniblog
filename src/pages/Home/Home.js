@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Home.module.css";
 
 //hooks
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useFetchDocuments } from "../../hooks/useFetchDocuments";
 
@@ -12,9 +12,15 @@ import { PostDetails } from "../../components/PostDetails/PostDetails";
 export const Home = () => {
   const [query, setQuery] = useState("");
   const { document: posts, loading } = useFetchDocuments("posts");
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if(query){
+      return  navigate(`/search?q=${query}`)
+    }
+
   };
   return (
     <div className={styles.home}>
