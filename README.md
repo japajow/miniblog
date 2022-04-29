@@ -2055,3 +2055,56 @@ const { document: post, loading } = useFetchDocument("posts", id);
   )}
 </div>;
 ```
+
+## Css da pagina post individual
+
+Primeiro terminando a estrutura do HTML
+
+```tsx
+<div>
+  {loading && <p>Carregando...</p>}
+  {post && (
+    <>
+      <h1>{post.title}</h1>
+      <img src={post.image} alt={post.title} />
+      <p>{post.body}</p>
+      <h3>Este post trata sobre</h3>
+      <div className={styles.tags}>
+        {[
+          post.tagsArray.map((tag) => (
+            <p key={tag}>
+              <span>#</span>
+              {tag}
+            </p>
+          )),
+        ]}
+      </div>
+    </>
+  )}
+</div>
+```
+
+etilizando
+
+```css
+.post_container {
+  text-align: center;
+}
+
+.post_container h3 {
+  margin-bottom: 0.2em;
+}
+
+.post_container .tags {
+  display: flex;
+  justify-content: center;
+}
+
+.tags p {
+  margin-right: 1em;
+}
+
+.tags span {
+  font-weight: bold;
+}
+```
