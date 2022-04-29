@@ -1731,3 +1731,106 @@ export const useFetchDocuments = (docCollection, search = null, uid = null) => {
   return { document, loading, error };
 };
 ```
+
+## Exibindo os dados na Home
+
+Na Home.js
+
+```tsx
+const { documents: posts, loading } = useFetchDocuments("posts");
+
+// agora pegamos os posts e colocamos no HTML
+{
+  posts && posts.map((post) => <h3>{post.title}</h3>);
+}
+```
+
+Vamos criar o nosso port details components/PostDetails.js PostDetails.module.css
+
+```tsx
+import React from "react";
+import styles from "./PostDetails.module.css";
+
+import { Link } from "react-router-dom";
+
+export const PostDetails = ({ post }) => {
+  return (
+    <div>
+      <img src={post.image} alt={post.title} />
+      <h2>{post.title}</h2>
+      <p>{post.createdBy}</p>
+      <div>
+        {post.tagsArray.map((tag) => (
+          <p key={tag}>
+            <span>#</span>
+            {tag}
+          </p>
+        ))}
+      </div>
+      <Link to={`/posts/${post.id}`} className="btn btn-outiline}">
+        Ler
+      </Link>
+    </div>
+  );
+};
+```
+
+Colocamos o component PostDetails.js na Home.js
+
+```tsx
+{
+  posts && posts.map((post) => <PostDetails key={post.id} post={post} />);
+}
+```
+
+## Css do detalhes post PostDetails.module.css
+
+PostDetails.module.css
+
+```css
+.post_detail {
+  margin-bottom: 2em;
+}
+
+.post_detail img {
+  max-width: 600px;
+}
+
+.post_detail h2 {
+  margin-bottom: 0.4em;
+}
+
+.post_detail .tags {
+  display: flex;
+  margin-bottom: 1.2em;
+}
+
+.tags p {
+  margin-right: 0.5em;
+}
+
+.tags span {
+  font-weight: bold;
+}
+
+.createdby {
+  font-style: italic;
+  color: #444;
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+```
+
+colocando as classes no HTML do PostDetails.js
+
+```tsx
+
+   <div className={styles.post_detail}>
+      <img  src={post.image} alt={post.title} />
+      <h2>{post.title}</h2>
+      <p className={styles.createdby}>{post.createdBy}</p>
+      <div className={styles.tags}>
+
+```
+
+

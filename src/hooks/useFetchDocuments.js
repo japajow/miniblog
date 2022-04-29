@@ -8,11 +8,11 @@ import {
   where,
 } from "firebase/firestore";
 
-export const useFetchDocuments = ({
+export const useFetchDocuments = (
   docCollection,
   search = null,
   uid = null,
-}) => {
+) => {
   const [document, setDocument] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
@@ -26,7 +26,7 @@ export const useFetchDocuments = ({
 
       setLoading(true);
 
-      const collectionRef = collection(db, docCollection);
+      const collectionRef = await collection(db, docCollection);
 
       try {
         let q;
