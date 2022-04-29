@@ -1844,7 +1844,7 @@ Vamos no useFetchDocuments.js
 if (search) {
   q = await query(
             collectionRef,
-            where("tags", "array-contains", search),
+            where("tagsArray", "array-contains", search),
             orderBy("createdAt", "desc")
 } else {
   q = await query(collectionRef, orderBy("createdAt", "desc"));
@@ -1905,4 +1905,57 @@ import { useQuery } from "../../hooks/useQuery";
 const query = useQuery();
 //pegamos o atributo q
 const search = query.get("q");
+```
+
+## Exibindo resultado da busca
+
+Na pagina do Search.js temos que carregar os documentos na base que foi feita a pesquisa
+
+usamos o hook useFetchDocuments
+
+```tsx
+ //usamos o nosso useFetcDocuments passando posts e a busca search
+  const [documents: posts] = useFetchDocuments("posts",search)
+
+  // criamos uma div
+  // e fazemos um map chamando o nosso PostDetails passando atributo post do map
+  //esse seria quando tiver o post pesquisado
+    {posts && posts.map((post)=> (<PostDetail  key={post.id} post={post}/>))}
+
+  // quando nao houver resultado
+   {posts && posts.length === 0 && (<><p>Nao foram encontrados posts a partir da sua busca...</p><LInk to={'/'} className={'btn btn-dark'}>Voltar</Link></>)}
+
+```
+
+Estilizando nossa pagina Search.module.css
+
+```css
+.search_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.search_container h1 {
+  margin-bottom: 1em;
+}
+
+.search_container p {
+  margin-bottom: 30px;
+}
+
+.noposts {
+  text-align: center;
+}
+```
+
+Colocando a classe no HTML no Search.js
+
+```tsx
+
+  <div className={styles.search_container}>
+
+   <div className={styles.noposts}>
+
 ```
