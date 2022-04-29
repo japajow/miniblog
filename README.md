@@ -1959,3 +1959,34 @@ Colocando a classe no HTML no Search.js
    <div className={styles.noposts}>
 
 ```
+
+## Criando pagina de post individual sigle page
+
+pages/Post/Post.js Post.module.css
+
+```tsx
+import React from "react";
+
+import styles from "./Post.module.css";
+
+//hooks
+import { useParams } from "react-router-dom";
+
+export const Post = () => {
+  return <div>Post</div>;
+};
+```
+
+Vamos no App.js e criamos a rota para o sigle page
+
+```tsx
+<Route path="/post/:id" element={<Post />} />
+```
+
+Voltamso no Post.js
+
+```tsx
+//pegamos o id pelo useParams
+
+const { id } = useParams();
+```
